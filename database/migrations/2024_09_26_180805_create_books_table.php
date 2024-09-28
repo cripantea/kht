@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        \App\Models\Book::factory(15)->create();
+  /*      \App\Models\Book::factory(15)->create();*/
 
     }
 
