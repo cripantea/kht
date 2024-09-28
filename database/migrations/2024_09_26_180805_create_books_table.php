@@ -19,6 +19,9 @@ return new class extends Migration
             $table->decimal('price');
             $table->timestamps();
         });
+
+        \App\Models\Book::factory(15)->create();
+
     }
 
     /**
