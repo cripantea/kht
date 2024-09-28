@@ -11,7 +11,7 @@
             <div class="book mt-2 border-b border-cyan-800 pb-8">
                 <div class="relative inline-block w-full">
                     <a href="#">
-                        <img src="{{ Storage::url('public/'.$book->image) }}" alt="no" class="hover:opacity-75 transition ease-in-out duration-150 rounded-md">
+                        <img src="{{ Storage::url('photos/'.$book->image) }}" alt="no" class="hover:opacity-75 transition ease-in-out duration-150 rounded-md">
                     </a>
                     <div class="absolute bottom-0 right-0 w-8 h-8 bg-cyan-800 rounded-full" style="right: -10px; bottom: -10px">
                         <div class="font-semibold text-lg flex justify-center items-center h-full">

@@ -24,13 +24,13 @@ class BookFactory extends Factory
 
         $response = Http::get($randomImageUrl);
         $imageName = Str::random(10) . '.jpg';
-        Storage::put('public/photos/' . $imageName, $response->body());
+        Storage::disk('public')->put('photos/' . $imageName, $response->body());
 
         return [
             'name' => $this->faker->words(2, true),
             'description' => $this->faker->text(),
             'price' => $this->faker->randomFloat(2, 5, 40),
-            'image' => 'photos/' . $imageName,
+            'image' => $imageName,
 
         ];
     }
