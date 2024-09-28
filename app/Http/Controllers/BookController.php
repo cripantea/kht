@@ -39,7 +39,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        return view('book.detail', compact('book'));
     }
 
     /**
@@ -70,12 +70,15 @@ class BookController extends Controller
     {
         $book = Book::findOrFail($id);
         $user = auth()->user();
+        $result='';
         if ($user->favoriteBooks()->where('book_id', $id)->exists()) {
             $user->favoriteBooks()->detach($id);
+            $result="Rimosso dai favoriti!";
         } else {
             $user->favoriteBooks()->attach($id);
+            $result="Aggiunto ai favoriti!";
         }
-        return redirect()->back();
+        return redirect()->back()->with(compact('result'));
     }
 
 }

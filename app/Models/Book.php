@@ -14,4 +14,10 @@ class Book extends Model
     {
         return $this->belongsToMany(User::class, 'favorite_books')->withTimestamps();
     }
+
+    public function isFavorite()
+    {
+        return auth()->user()->favoriteBooks()->where('book_id', $this->id)->exists();
+    }
+
 }

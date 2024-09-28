@@ -50,4 +50,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Book::class, 'favorite_books')->withTimestamps();
     }
+
+
 }

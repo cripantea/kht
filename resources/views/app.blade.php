@@ -13,9 +13,21 @@
                     <img src="https://khtwaters.com/wp-content/uploads/LOGO-KHT.png" alt="Vetrina libri" class="w-12 flex-none">
                 </a>
                 <ul class="flex ml-16 space-x-8">
+                    @if(\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->isAdmin)
                     <li><a href="#" class="hover:text-cyan-400">Aggiungi libro</a></li>
                     <li><a href="{{route('users.index')}}" class="hover:text-cyan-400">Gestione Utenti</a></li>
+                    @endif
+
+                        @if(!\Illuminate\Support\Facades\Auth::check())
                     <li><a href="{{route('users.create')}}" class="hover:text-cyan-400">Registrati!</a></li>
+                    <li><a href="{{route('login')}}" class="hover:text-cyan-400">Accedi!</a></li>
+                        @endif
+                        @if(\Illuminate\Support\Facades\Auth::check())
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit">Logout</button>
+                    </form>
+                        @endif
                 </ul>
             </div>
             <div class="flex items-center">

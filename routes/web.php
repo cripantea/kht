@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\AuthController;
 
 Route::get('/', [BookController::class, 'index']);
 
@@ -16,8 +17,12 @@ Route::resource('books', BookController::class);
 
 
 Route::get('/', [BookController::class, 'index']);
-Route::get('/book/{id}', [BookController::class, 'show']);
+Route::get('/book/{id}', [BookController::class, 'show']);*/
 Route::middleware('auth')->group(function () {
-    Route::post('/book/{id}/favorite', [BookController::class, 'toggleFavorite']);
-    Route::get('/profile', [ProfileController::class, 'edit']);
-});*/
+    Route::post('/book/{id}/favorite', [BookController::class, 'toggleFavorite'])->name('book.toggle');
+   // Route::get('/profile', [ProfileController::class, 'edit']);
+});
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
