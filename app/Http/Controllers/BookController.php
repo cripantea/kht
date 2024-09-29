@@ -46,7 +46,7 @@ class BookController extends Controller
             'price' => $request->input('price'),
             'image' => $imagePath
         ]);
-        return redirect()->route('dashboard')->with('success', 'Book created successfully');
+        return redirect()->route('dashboard')->with('success', 'book created successfully');
 
     }
 

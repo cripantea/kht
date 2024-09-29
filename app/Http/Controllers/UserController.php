@@ -82,7 +82,7 @@ class UserController extends Controller
             $isAdmin=1;
         }
 
-        //$user=User::find($id);
+        //$user=user::find($id);
         $user->name=$request->input('name');
         $user->email=$request->input('email');
         $user->isAdmin=$isAdmin;
