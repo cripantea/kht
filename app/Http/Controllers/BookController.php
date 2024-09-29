@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreBookRequest;
-use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -23,15 +23,31 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        return view('book.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBookRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        $imagePath=uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+        Storage::disk('public')->put('photos/'. $imagePath, file_get_contents($request->file('image')));
+
+        Book::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+            'image' => $imagePath
+        ]);
+        return redirect()->route('dashboard')->with('success', 'Book created successfully');
+
     }
 
     /**
@@ -47,15 +63,36 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        //
+        return view('book.edit', compact('book'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBookRequest $request, Book $book)
+    public function update(Request $request, Book $book)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        $book->name = $request->input('name');
+        $book->description = $request->input('description');
+        $book->price = $request->input('price');
+
+        // Check if a new image has been uploaded
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($book->image && Storage::disk('public')->exists('photos/'.$book->image)) {
+                Storage::disk('public')->delete('photos/'.$book->image);
+            }
+            $imagePath=uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+            Storage::disk('public')->put('photos/'. $imagePath, file_get_contents($request->file('image')));
+            $book->image=$imagePath;
+        }
+        $book->save();
+        return redirect(route('dashboard'));
     }
 
     /**
@@ -63,7 +100,9 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book->usersWhoFavorited()->detach();
+        $book->delete();
+        return redirect(route('books.index'));
     }
 
     public function toggleFavorite($id)

@@ -14,7 +14,7 @@
                 </a>
                 <ul class="flex ml-16 space-x-8">
                     <li><a href="{{route('books.index')}}" class="hover:text-cyan-400">Pagina principale</a></li>
-                    <li><a href="{{route('users.create')}}" class="hover:text-cyan-400">Registrati!</a></li>
+                    <li><a href="/register" class="hover:text-cyan-400">Registrati!</a></li>
                 </ul>
             </div>
         </nav>

@@ -14,12 +14,12 @@
                 </a>
                 <ul class="flex ml-16 space-x-8">
                     @if(\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->isAdmin)
-                    <li><a href="#" class="hover:text-cyan-400">Aggiungi libro</a></li>
-                    <li><a href="{{route('users.index')}}" class="hover:text-cyan-400">Gestione Utenti</a></li>
+                    <li><a href="{{route('books.create')}}" class="hover:text-cyan-400">Aggiungi libro</a></li>
+                    <li><a href="/users" class="hover:text-cyan-400">Gestione Utenti</a></li>
                     @endif
 
                         @if(!\Illuminate\Support\Facades\Auth::check())
-                    <li><a href="{{route('users.create')}}" class="hover:text-cyan-400">Registrati!</a></li>
+                    <li><a href="/register" class="hover:text-cyan-400">Registrati!</a></li>
                     <li><a href="{{route('login')}}" class="hover:text-cyan-400">Accedi!</a></li>
                         @endif
                         @if(\Illuminate\Support\Facades\Auth::check())
@@ -27,9 +27,21 @@
                         @csrf
                         <button type="submit">Logout</button>
                     </form>
+
                         @endif
                 </ul>
+
             </div>
+            @if(\Illuminate\Support\Facades\Auth::check())
+                @if(\Illuminate\Support\Facades\Auth::user()->isAdmin)
+                    <div class="flex items-center text-green-400">
+                        @else
+                    <div class="flex items-center">
+                @endif
+                        Bentornato  <span class="ml-2 font-semibold">{{ \Illuminate\Support\Facades\Auth::user()->name }}</span> !
+                </div>
+            @endif
+
             <div class="flex items-center">
                 <div class="relative">
                     <input type="text" class="bg-cyan-800 text-sm rounded-full px-3 py-1 pl-8 w-64 focus:outline-none  focus:shadow-outline " placeholder="Cerca">

@@ -24,13 +24,20 @@ class AuthController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
+        $isAdmin=0;
+
+        if(isset($request->isAdmin) && $request->isAdmin=='on')
+        {
+            $isAdmin=1;
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'isAdmin' => $isAdmin,
         ]);
 
-        // Login automatico dopo registrazione
         Auth::login($user);
 
         return redirect()->route('dashboard');

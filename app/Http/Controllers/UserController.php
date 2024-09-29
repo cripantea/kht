@@ -41,8 +41,9 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'isAdmin' => $request->isAdmin ?? false,
         ]);
-dd($request);
+
         // Restituisci una risposta di successo
         return redirect()->route('users.index')->with('success', 'Registrazione avvenuta con successo!');
     }
@@ -60,17 +61,55 @@ dd($request);
      */
     public function edit(string $id)
     {
-        //
+        $user=User::find($id);
+        return view('user.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+        ]);
+
+        $isAdmin=0;
+
+        if(isset($request->isAdmin) && $request->isAdmin=='on')
+        {
+            $isAdmin=1;
+        }
+
+        //$user=User::find($id);
+        $user->name=$request->input('name');
+        $user->email=$request->input('email');
+        $user->isAdmin=$isAdmin;
+        $user->save();
+
+        return redirect(route('users.edit', $user));
     }
 
+
+    public function updatePassword(Request $request, User $user)
+    {
+        $request->validate([
+            'oldpassword' => 'required|string|max:255',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if(Hash::check($request->input('oldpassword'), $user->password))
+        {
+            $user->password=Hash::make($request->input('password'));
+            $user->save();
+        }
+        else {
+            return redirect(route('users.edit', $user));
+        }
+
+        return redirect(route('users.index'));
+    }
     /**
      * Remove the specified resource from storage.
      */
